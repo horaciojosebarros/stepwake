@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">StepWake</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hour_prompt">Hours</string>
+    <string name="minute_prompt">Minutes</string>
+    <string name="step_sensor_not_available_message">Sensor não encontrado</string>
+    <string name="alarm_stopped_message">Alarme parado</string>
+    <string name="step_goal_message">Informar numero de passos</string>
+    <string name="alarm_saved_message">Dados Salvos!</string>
+    <string name="alarm_set_message">Gravar</string>
+    <string name="hour_label_text">Hora:</string>
+    <string name="minute_label_text">Minuto:</string>
+
+    <string name="set_alarm_button_text">Salvar</string>
+    <string name="app_icon_desc">Ícone do aplicativo StepWake</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+
+</resources>

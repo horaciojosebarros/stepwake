@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <!-- Ícone do Aplicativo -->
+    <ImageView
+        android:id="@+id/appIconImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:src="@mipmap/stepwake_round"
+        android:contentDescription="@string/app_icon_desc" />
+
+    <!-- Campo de Hora -->
+    <TextView
+        android:id="@+id/hourLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hour_label_text"
+        android:textSize="16sp"
+        android:paddingEnd="8dp" />
+
+    <TextView
+        android:id="@+id/hourTextView"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/textview_border"
+        android:padding="8dp"
+        android:text="00" />
+
+
+    <!-- Campo de Minuto -->
+    <TextView
+        android:id="@+id/minuteLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/minute_label_text"
+        android:textSize="16sp"
+        android:paddingEnd="8dp" />
+
+    <TextView
+        android:id="@+id/minuteTextView"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/textview_border"
+        android:padding="8dp"
+        android:text="00" />
+    <!-- Botão para Configurar o Alarme -->
+    <Button
+        android:id="@+id/setAlarmButton"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/set_alarm_button_text"
+        android:backgroundTint="@color/green" />
+
+
+</LinearLayout>
+
+
