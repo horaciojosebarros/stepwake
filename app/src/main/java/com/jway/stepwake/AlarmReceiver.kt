@@ -4,38 +4,67 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.util.Log
+import android.media.MediaPlayer
+import android.media.RingtoneManager
+import android.net.Uri
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.widget.Toast
 
-import androidx.core.app.NotificationCompat
+class AlarmReceiver : BroadcastReceiver(), SensorEventListener {
 
-class AlarmReceiver : BroadcastReceiver() {
+    private var mediaPlayer: MediaPlayer? = null
+    private var sensorManager: SensorManager? = null
+    private var stepCount = 0
+    private var initialStepCount = -1
+
     override fun onReceive(context: Context, intent: Intent?) {
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        Toast.makeText(context, "Alarme disparado! Ande 20 passos para desligar.", Toast.LENGTH_LONG).show()
 
-        val channelId = "alarm_channel"
-        val channelName = "Alarm Notifications"
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(channel)
+        // Tocar som do alarme
+        val alarmSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        mediaPlayer = MediaPlayer.create(context, alarmSound)
+        mediaPlayer?.isLooping = true
+        mediaPlayer?.start()
+
+        // Configurar Sensor de Passos
+        sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val stepSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+
+        if (stepSensor != null) {
+            sensorManager?.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        } else {
+            Toast.makeText(context, "Sensor de passos não disponível.", Toast.LENGTH_SHORT).show()
         }
-
-        val notification = NotificationCompat.Builder(context, channelId)
-            .setContentTitle("Alarme!")
-            .setContentText("O alarme foi disparado.")
-            .setSmallIcon(android.R.drawable.ic_dialog_alert)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .build()
-
-        notificationManager.notify(1, notification)
-        Log.d("AlarmReceiver", "Alarme disparado!")
     }
 
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event?.sensor?.type == Sensor.TYPE_STEP_COUNTER) {
+            if (initialStepCount == -1) {
+                initialStepCount = event.values[0].toInt()
+            }
 
+            stepCount = event.values[0].toInt() - initialStepCount
+
+            if (stepCount >= 20) {
+                // Parar o alarme após 20 passos
+                mediaPlayer?.stop()
+                mediaPlayer?.release()
+                mediaPlayer = null
+
+                // Desregistrar o listener do sensor
+                sensorManager?.unregisterListener(this)
+
+
+            }
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // Não necessário neste caso
+    }
 }
+
+

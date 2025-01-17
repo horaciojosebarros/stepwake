@@ -14,11 +14,17 @@ import androidx.appcompat.app.AppCompatActivity
 
 import java.util.Calendar
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var alarmManager: AlarmManager
     private lateinit var alarmIntent: PendingIntent
     private lateinit var dbHelper: AlarmDbHelper
+    private val ACTIVITY_RECOGNITION_PERMISSION_CODE = 100
 
 
         private var selectedHour = 0
@@ -42,6 +48,8 @@ class MainActivity : AppCompatActivity() {
 
             hourTextView.text = String.format("%02d", selectedHour)
             minuteTextView.text = String.format("%02d", selectedMinute)
+
+            checkPermission()
 
             // Abrir TimePicker ao clicar no TextView de hora
             hourTextView.setOnClickListener {
@@ -118,4 +126,33 @@ class MainActivity : AppCompatActivity() {
 
             Toast.makeText(this, "Alarme configurado para $selectedHour:$selectedMinute", Toast.LENGTH_SHORT).show()
         }
+    private fun checkPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACTIVITY_RECOGNITION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                ACTIVITY_RECOGNITION_PERMISSION_CODE
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == ACTIVITY_RECOGNITION_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permissão concedida!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Permissão negada. O alarme pode não funcionar corretamente.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 }
